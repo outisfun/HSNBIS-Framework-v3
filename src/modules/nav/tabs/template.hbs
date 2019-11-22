@@ -1,0 +1,13 @@
+<nav class = "isf-nav_tabs js--tabs">
+  <div class = "isf-nav_tabs__inner">
+    <ul>
+      {{#each tabs }}
+      <li>
+        <button class = "js--tab isf-nav_tab" data-trgt = "{{ tabTarget }}">
+          {{ tabLabel }}
+        </button>
+      </li>
+      {{/each}}
+    </ul>
+  </div>
+</nav>

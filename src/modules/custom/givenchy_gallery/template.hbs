@@ -1,0 +1,16 @@
+
+<div class = "isf-el_gallery isf-el_gallery--givenchy js--gallery" id = "{{ modId }}">
+  <div class = "isf-el_gallery--inner js--gallery--inner">
+    {{#each imageGroups}}
+    <div class = "isf-el_gallery__group" data-effect = "{{ effect }}">
+      {{#each images}}
+        <div class = "isf-el_image js--image isf-el_gallery__item js--gallery__item {{ customClass }}">
+          <div class = "isf-el_image--inner js--item--inner">
+            <img src="{{ src }}" />
+          </div>
+        </div>
+      {{/each}}
+    </div>
+    {{/each}}
+  </div>
+</div>

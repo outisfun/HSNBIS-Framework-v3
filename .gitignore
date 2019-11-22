@@ -1,0 +1,13 @@
+# Ignore the node modules folder (created by 'npm install').
+node_modules
+
+.DS_Store
+
+# also sass-cache
+.sass-cache
+.sass-cache/*
+
+# those are generative
+stories/**/build/scripts.js
+stories/**/build/styles.scss
+stories/**/dist

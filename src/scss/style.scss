@@ -1,0 +1,103 @@
+@import 'variables';
+@import 'breakpoints';
+@import 'spacing';
+@import 'grid';
+@import 'typography';
+
+@font-face {
+  font-family: univers-regular;
+  src: url('https://interactive-development.hsnb.io/hsnbisf/fonts/UniversLTStd.otf');
+}
+
+@font-face {
+  font-family: univers-bold;
+  src: url('https://interactive-development.hsnb.io/hsnbisf/fonts/UniversLTStd-Bold.otf');
+}
+
+body.isf {
+  overflow-x: hidden;
+  min-height: 100vh;
+  margin: 0px;
+  font-family: univers-regular, sans-serif;
+  img {
+    width: 100%;
+    max-width: 100%;
+  }
+}
+
+
+
+.isf-color-scheme--dark {
+  background-color: black;
+  color: white;
+}
+
+/* format the img element after replacing with media library */
+
+.isf-interactive-story figure.img-element {
+margin: 0px auto!important;
+}
+.isf-interactive-story .aspect-ratio-placeholder {
+max-width: none!important;
+}
+
+.isf-interactive-story .aspect-ratio-placeholder__fill {
+display: none;
+}
+
+.isf-interactive-story .aspect-ratio-placeholder img.image {
+padding: 5px;
+width: 100%;
+height: auto;
+position: relative!important;
+}
+
+.isf-interactive-story .aspect-ratio-placeholder img{
+position: relative!important;
+}
+
+.isf-interactive-story .aspect-ratio-placeholder .image {
+padding: 5px;
+width: 100%!important;
+height: auto!important;
+position: relative!important;
+}
+
+.isf-interactive-story img {
+position: relative!important;
+}
+
+.isf-interactive-story .img-element__credit {
+  padding-left: 5px;
+}
+
+.isf-custom-header {
+  height: 100vh;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-size: cover;
+  background-position: center center;
+
+  &__title {
+    color: white;
+    max-width: 800px;
+    text-align: center;
+    position: relative;
+    z-index: 5;
+  }
+
+  &:before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    background-color: rgba(0,0,0,0.45);
+  }
+}
+
+
+

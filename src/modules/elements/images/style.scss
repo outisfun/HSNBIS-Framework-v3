@@ -1,0 +1,25 @@
+.isf-el_image {
+  display: block;
+  overflow: hidden;
+}
+
+.isf-el_images {
+  &__inner {
+    display: flex;
+    margin: 0 auto;
+    max-width: 1600px;
+    justify-content: center;
+  }
+  .isf-el_image {
+    padding: 5px;
+    flex-basis: 0;
+    flex-grow: 1;
+  }
+  .isf-el_picture {
+    max-height: 90vh;
+    display: flex;
+    img {
+      object-fit: contain;
+    }
+  }
+}

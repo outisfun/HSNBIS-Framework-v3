@@ -1,0 +1,45 @@
+<div class = "isf-el_gallery-two js--gallery-two" id = "{{ modId }}" data-current_step = "0">
+
+    <div class = "isf-el_gallery-two__viewer js--gallery-two__viewer">
+
+        <div class = "isf-el_gallery-two__viewer__header js--gallery-two__viewer__header">
+            <div class = "isf-viewer__header__mask js--viewer__header__mask">
+                <div class = "isf-viewer__header__background js--viewer__header__background" style = "background-image: url('{{ viewerImage }}')">
+                </div>
+            </div>
+            <h1 class = "isf-viewer__header__heading">{{ viewerHeading }}</h1>
+        </div>
+        {{#each viewerScenes}}
+      <div class = "isf-el_gallery-two__viewer__item js--gallery-two__viewer__item h--{{ posH }}" data-item = "{{ dataItem }}">
+        <div class = "viewer-group__inner">
+                {{#if src}}
+          <img src = "{{ src }}" />
+                {{/if}}
+                {{#if heading}}
+                <h2>{{ heading }}</h2>
+                {{/if}}
+        </div>
+      </div>
+        {{/each}}
+    </div>
+
+    <div class = "isf-el_gallery-two__steps js--gallery-two__steps">
+        {{#each steps}}
+        <div class = "isf-el_gallery-two__step js--gallery-two__step step--0" data-viewer = "{{ dataViewer }}">
+            <div class = "step__inner h--{{ alignH }}">
+                {{#each stepImages}}
+                <div class = "isf-el_gallery-two__item js--gallery-two__item step__inner__img" data-effect = "{{ effect }}">
+                    <div class = "isf-el_image__wrap">
+                        <img src = "{{ src }}" />
+                        {{#if caption}}
+                            <p class = "isf-el_image__caption">{{{ caption }}}</p>
+                        {{/if}}
+                    </div>
+                </div>
+                {{/each}}
+            </div>
+        </div>
+        {{/each}}
+    </div>
+
+</div>
