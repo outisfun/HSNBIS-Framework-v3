@@ -51,7 +51,7 @@ module.exports = function(grunt) {
           node: true
         },
         files: {
-          'builder/templates.js': ['./src/modules/layouts/**/*.hbs', './src/modules/elements/**/*.hbs', './src/modules/nav/**/*.hbs', './src/modules/custom/**/*.hbs','./stories/**/*.hbs'],
+          './src/builder/templates.js': ['./src/modules/layouts/**/*.hbs', './src/modules/elements/**/*.hbs', './src/modules/nav/**/*.hbs', './src/modules/custom/**/*.hbs','./stories/**/*.hbs'],
         }
       }
     },
@@ -64,7 +64,7 @@ module.exports = function(grunt) {
       },
       pages: {
         files: {
-          './stories/2019-10-nike-marathon/dist/scripts.min.js': ['./stories/' + story + '/dist/scripts.js']
+          './stories/{$story}/dist/scripts.min.js': ['./stories/' + story + '/dist/scripts.js']
         }
       }
     },
@@ -166,12 +166,12 @@ module.exports = function(grunt) {
         tasks: ['sass:stories']
       },
       js: {
-        files: ['./src/*.js', './stories/**/build/*.js', './builder/script_build.js', './src/modules/**/*.js', './preview/build/*.js',],
+        files: ['./src/*.js', './stories/**/build/*.js', './src/builder/*.js', './src/modules/**/*.js', './preview/build/*.js',],
         tasks: ['browserify:stories']
       },
       hbs: {
-        files: ['./src/modules/**/template.hbs', './stories/**/**/template.hbs', './stories/**/**/template.hbs'],
-        tasks: ['handlebars', 'htmlmin']
+        files: ['./src/modules/**/**/template.hbs', './stories/**/**/template.hbs', './stories/**/**/template.hbs'],
+        tasks: ['handlebars']
       },
       html: {
         files: ['./stories/**/build/index.html'],
@@ -192,7 +192,7 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-browserify');
   grunt.loadNpmTasks('grunt-eslint');
   grunt.loadNpmTasks('grunt-autoprefixer');
-  grunt.loadNpmTasks('grunt-contrib-uglify');
+  grunt.loadNpmTasks('grunt-contrib-uglify-es');
   grunt.loadNpmTasks('grunt-contrib-handlebars');
   grunt.loadNpmTasks('grunt-contrib-htmlmin');
   grunt.loadNpmTasks('grunt-shell');
@@ -202,7 +202,7 @@ module.exports = function(grunt) {
 
   grunt.registerTask('init-custom-module', ['shell:initCustomModule:' + story]);
   grunt.registerTask('init-story', ['shell:initStory:' + story, 'browserify:stories', 'sass:stories', 'watch']);
-  grunt.registerTask('build-story', ['handlebars', 'shell:buildStory:' + story, 'browserify:stories', 'sass:stories', 'autoprefixer:stories', 'watch']);
+  grunt.registerTask('build-story', ['browserify:stories', 'sass:stories', 'autoprefixer:stories', 'uglify']);
 
   grunt.registerTask('default', ['watch']); //test
 };

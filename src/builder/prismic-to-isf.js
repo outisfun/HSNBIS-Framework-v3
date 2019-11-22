@@ -41,7 +41,8 @@ const MapPrismicToISFKeys = {
   layout_chapter_start: 'chapter',
   isf_text: 'text',
   isf_images: 'images',
-  isf_quote: 'quote'
+  isf_quote: 'quote',
+  isf_gallery: 'gallery'
 };
 
 function PrismicToISF(prismicData) {
@@ -171,7 +172,17 @@ PrismicToISF.prototype.setupElementData = function (elType, elData) {
         var _key = ((textEl.type === 'heading4') ? 'quote' : 'source');
         element.elementData[_key] = textEl.text;
       });
-
+    });
+  } else if (elType === 'gallery') {
+    element.elementData.layout = elData.primary.isf_gallery_type[0].text;
+    element.elementData.colorScheme = 'dark';
+    element.elementData.images = [];
+    _.forEach(elData.items, (item, index) => {
+      var _image = {
+        src: item.isf_gallery_image.url,
+        alt: item.isf_gallery_image.alt
+      };
+      element.elementData.images.push(_image);
     });
   }
 

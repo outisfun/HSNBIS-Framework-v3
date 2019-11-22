@@ -9,9 +9,10 @@ var ISFDATA = require('builder/isf-data.js');
 function ISFNavTabs (el, controller) {
   this.controller = controller;
   this.DOM = { el: el };
-  this.DOM.tabs = Array.from(this.DOM.el.querySelectorAll(ISFDATA.NAV.TABS.CLASSES.TAB));
+  this.DOM.tabs = Array.from(this.DOM.el.querySelectorAll("." + ISFDATA.NAV.TABS.CLASSES.TAB));
+
+  console.log(this, this.DOM.el, ISFDATA.NAV.TABS.CLASSES.TAB);
   this.scrollScenes = [];
-  this.init();
 }
 
 ISFNavTabs.prototype.init = function () {

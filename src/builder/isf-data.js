@@ -24,14 +24,20 @@ const ISFDATA = {
     }
   },
   ELEMENTS: {
-    // no js info here. rethink it though
+    GALLERY: {
+      CLASSES: {
+        EL: 'js--gallery'
+      },
+      CONSTRUCTOR: 'ISF_Element_Gallery'
+    }
   },
   NAV: {
     TABS: {
       CLASSES: {
         EL: 'js--tabs',
         TAB: 'js--tab'
-      }
+      },
+      CONSTRUCTOR: 'ISF_Nav_Tabs'
     }
   }
 };
