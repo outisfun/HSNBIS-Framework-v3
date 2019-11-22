@@ -16,6 +16,9 @@ ISF.ISF_Layout_SplitSticky = require('splitsticky/script.js');
 ISF.ISF_Element_Gallery = require('gallery/script.js');
 ISF.ISF_Nav_Tabs = require('tabs/script.js');
 
+// CHANGE THIS!!!
+var prismicDocumentId = 'XdVcShEAACIA-rOn';
+
 ( function(window) {
 
   'use strict';
@@ -106,7 +109,7 @@ ISF.ISF_Nav_Tabs = require('tabs/script.js');
   // load data from prismic
   // refactor by loading the id dynamically or something
   Prismic.getApi("https://hsnbsttest.prismic.io/api/v2",  {}).then(function(api) {  return api.query(
-    Prismic.Predicates.at('document.id', 'XdVcShEAACIA-rOn'), {} );
+    Prismic.Predicates.at('document.id', prismicDocumentId), {} );
   }).then(function(response) {
     var story = new ISFStory(document.querySelector("#isf-interactive-story"), response.results[0].data);
   });
