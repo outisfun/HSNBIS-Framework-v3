@@ -21,7 +21,7 @@ this["modules"]["chapter"] = Handlebars.template({"1":function(container,depth0,
     + ((stack1 = helpers["if"].call(alias1,(depth0 != null ? depth0.chapterBackground : depth0),{"name":"if","hash":{},"fn":container.program(1, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
     + "                </div>\n            </div>\n        </div>\n        <div class = \"isf-layout_chapter__title isf-f-white\">\n            <div class = \"isf-container\">\n                <h1 class = \"isf-layout__chapter__title-el\">"
     + ((stack1 = ((helper = (helper = helpers.chapterTitle || (depth0 != null ? depth0.chapterTitle : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"chapterTitle","hash":{},"data":data}) : helper))) != null ? stack1 : "")
-    + "</h1>\n            </div>\n        </div>\n    </div>\n\n    <div class = \"isf-layout_chapter__content js--chapter__content js--content\">\n        <div class = \"isf-"
+    + "</h1>\n            </div>\n        </div>\n    </div>\n\n    <div class = \"isf-layout_chapter__content js--chapter__content js--content\">\n        <div class = \"isf-container isf-"
     + alias4(((helper = (helper = helpers.container || (depth0 != null ? depth0.container : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"container","hash":{},"data":data}) : helper)))
     + "\">\n            <!-- content -->\n        </div>\n    </div>\n</div>\n";
 },"useData":true});
@@ -73,7 +73,7 @@ this["modules"]["simple"] = Handlebars.template({"compiler":[7,">= 4.0.0"],"main
     + alias4(((helper = (helper = helpers.colorScheme || (depth0 != null ? depth0.colorScheme : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"colorScheme","hash":{},"data":data}) : helper)))
     + "\" id = \""
     + alias4(((helper = (helper = helpers.modId || (depth0 != null ? depth0.modId : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"modId","hash":{},"data":data}) : helper)))
-    + "\">\n    <div class = \"isf-"
+    + "\">\n    <div class = \"isf-container isf-"
     + alias4(((helper = (helper = helpers.container || (depth0 != null ? depth0.container : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"container","hash":{},"data":data}) : helper)))
     + "\">\n        <!-- content -->\n   	</div>\n</div>\n";
 },"useData":true});
@@ -109,14 +109,14 @@ this["modules"]["cta"] = Handlebars.template({"compiler":[7,">= 4.0.0"],"main":f
 this["modules"]["gallery"] = Handlebars.template({"1":function(container,depth0,helpers,partials,data) {
     var stack1;
 
-  return ((stack1 = helpers["if"].call(depth0 != null ? depth0 : (container.nullContext || {}),(depth0 != null ? depth0.src : depth0),{"name":"if","hash":{},"fn":container.program(2, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "");
+  return ((stack1 = helpers["if"].call(depth0 != null ? depth0 : (container.nullContext || {}),(depth0 != null ? depth0.url : depth0),{"name":"if","hash":{},"fn":container.program(2, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "");
 },"2":function(container,depth0,helpers,partials,data) {
     var stack1, helper, alias1=depth0 != null ? depth0 : (container.nullContext || {}), alias2=helpers.helperMissing, alias3="function", alias4=container.escapeExpression;
 
   return "            <div class = \"isf-el_image js--image isf-el_gallery__item js--gallery__item\">\n                <div class = \"isf-el_image--inner js--item--inner\">\n                    <picture class = \"isf-el_picture js--picture\">\n                        <source srcset=\""
-    + alias4(((helper = (helper = helpers.src || (depth0 != null ? depth0.src : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"src","hash":{},"data":data}) : helper)))
+    + alias4(((helper = (helper = helpers.url || (depth0 != null ? depth0.url : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"url","hash":{},"data":data}) : helper)))
     + "\"\n                            media=\"(min-width: 768px)\">\n                        <img src=\""
-    + alias4(((helper = (helper = helpers.src || (depth0 != null ? depth0.src : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"src","hash":{},"data":data}) : helper)))
+    + alias4(((helper = (helper = helpers.url || (depth0 != null ? depth0.url : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"url","hash":{},"data":data}) : helper)))
     + "\" />\n                    </picture>\n"
     + ((stack1 = helpers["if"].call(alias1,(depth0 != null ? depth0.caption : depth0),{"name":"if","hash":{},"fn":container.program(3, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
     + "                </div>\n            </div>\n";
@@ -136,7 +136,7 @@ this["modules"]["gallery"] = Handlebars.template({"1":function(container,depth0,
     + "\" data-color_scheme = \""
     + alias4(((helper = (helper = helpers.colorScheme || (depth0 != null ? depth0.colorScheme : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"colorScheme","hash":{},"data":data}) : helper)))
     + "\" >\n    <div class = \"isf-el_gallery--inner js--gallery--inner\">\n        <div class = \"isf-el_gallery__items js--gallery__items\">\n"
-    + ((stack1 = helpers.each.call(alias1,(depth0 != null ? depth0.images : depth0),{"name":"each","hash":{},"fn":container.program(1, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
+    + ((stack1 = helpers.each.call(alias1,(depth0 != null ? depth0.items : depth0),{"name":"each","hash":{},"fn":container.program(1, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
     + "        </div>\n    </div>\n</div>\n";
 },"useData":true});
 
@@ -146,9 +146,8 @@ this["modules"]["images"] = Handlebars.template({"1":function(container,depth0,h
   return "      <div class = \"isf-el_image js--image\" "
     + ((stack1 = helpers["if"].call(alias1,(depth0 != null ? depth0.effect : depth0),{"name":"if","hash":{},"fn":container.program(2, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
     + ">\n"
-    + ((stack1 = helpers["if"].call(alias1,(depth0 != null ? depth0.src : depth0),{"name":"if","hash":{},"fn":container.program(4, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
-    + ((stack1 = helpers["if"].call(alias1,(depth0 != null ? depth0.srcalt : depth0),{"name":"if","hash":{},"fn":container.program(6, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
-    + ((stack1 = helpers["if"].call(alias1,(depth0 != null ? depth0.caption : depth0),{"name":"if","hash":{},"fn":container.program(8, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
+    + ((stack1 = helpers["if"].call(alias1,(depth0 != null ? depth0.url : depth0),{"name":"if","hash":{},"fn":container.program(4, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
+    + ((stack1 = helpers["if"].call(alias1,(depth0 != null ? depth0.caption : depth0),{"name":"if","hash":{},"fn":container.program(6, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
     + "      </div>\n";
 },"2":function(container,depth0,helpers,partials,data) {
     var helper;
@@ -160,17 +159,11 @@ this["modules"]["images"] = Handlebars.template({"1":function(container,depth0,h
     var helper, alias1=depth0 != null ? depth0 : (container.nullContext || {}), alias2=helpers.helperMissing, alias3="function", alias4=container.escapeExpression;
 
   return "          <picture class = \"isf-el_picture js--picture\">\n            <source srcset=\""
-    + alias4(((helper = (helper = helpers.src || (depth0 != null ? depth0.src : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"src","hash":{},"data":data}) : helper)))
+    + alias4(((helper = (helper = helpers.url || (depth0 != null ? depth0.url : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"url","hash":{},"data":data}) : helper)))
     + "\"\n                media=\"(min-width: 768px)\">\n            <img src=\""
-    + alias4(((helper = (helper = helpers.src || (depth0 != null ? depth0.src : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"src","hash":{},"data":data}) : helper)))
+    + alias4(((helper = (helper = helpers.url || (depth0 != null ? depth0.url : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"url","hash":{},"data":data}) : helper)))
     + "\" />\n          </picture>\n";
 },"6":function(container,depth0,helpers,partials,data) {
-    var helper;
-
-  return "          <picture class = \"isf-el_picture js--picture\">\n            <img src=\""
-    + container.escapeExpression(((helper = (helper = helpers.src || (depth0 != null ? depth0.src : depth0)) != null ? helper : helpers.helperMissing),(typeof helper === "function" ? helper.call(depth0 != null ? depth0 : (container.nullContext || {}),{"name":"src","hash":{},"data":data}) : helper)))
-    + "\" />\n          </picture>\n";
-},"8":function(container,depth0,helpers,partials,data) {
     var helper;
 
   return "          <small class = \"isf-el_caption\">\n            "
@@ -182,7 +175,7 @@ this["modules"]["images"] = Handlebars.template({"1":function(container,depth0,h
   return "<div class = \"isf-el_images js--images\" id = \""
     + container.escapeExpression(((helper = (helper = helpers.modId || (depth0 != null ? depth0.modId : depth0)) != null ? helper : helpers.helperMissing),(typeof helper === "function" ? helper.call(alias1,{"name":"modId","hash":{},"data":data}) : helper)))
     + "\">\n	<div class = \"isf-el_images__inner\">\n\n"
-    + ((stack1 = helpers.each.call(alias1,(depth0 != null ? depth0.images : depth0),{"name":"each","hash":{},"fn":container.program(1, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
+    + ((stack1 = helpers.each.call(alias1,(depth0 != null ? depth0.items : depth0),{"name":"each","hash":{},"fn":container.program(1, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
     + "\n	</div>\n</div>\n";
 },"useData":true});
 
@@ -249,16 +242,26 @@ this["modules"]["video"] = Handlebars.template({"1":function(container,depth0,he
 this["modules"]["tabs"] = Handlebars.template({"1":function(container,depth0,helpers,partials,data) {
     var helper, alias1=depth0 != null ? depth0 : (container.nullContext || {}), alias2=helpers.helperMissing, alias3="function", alias4=container.escapeExpression;
 
+  return "      <li>\n        <button class = \"js--tab--xs isf-nav_tab--xs\" data-trgt = \""
+    + alias4(((helper = (helper = helpers.tabTarget || (depth0 != null ? depth0.tabTarget : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"tabTarget","hash":{},"data":data}) : helper)))
+    + "\">\n          <span>"
+    + alias4(((helper = (helper = helpers.tabLabel || (depth0 != null ? depth0.tabLabel : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"tabLabel","hash":{},"data":data}) : helper)))
+    + "</span>\n        </button>\n      </li>\n";
+},"3":function(container,depth0,helpers,partials,data) {
+    var helper, alias1=depth0 != null ? depth0 : (container.nullContext || {}), alias2=helpers.helperMissing, alias3="function", alias4=container.escapeExpression;
+
   return "      <li>\n        <button class = \"js--tab isf-nav_tab\" data-trgt = \""
     + alias4(((helper = (helper = helpers.tabTarget || (depth0 != null ? depth0.tabTarget : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"tabTarget","hash":{},"data":data}) : helper)))
-    + "\">\n          "
+    + "\">\n          <span>"
     + alias4(((helper = (helper = helpers.tabLabel || (depth0 != null ? depth0.tabLabel : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"tabLabel","hash":{},"data":data}) : helper)))
-    + "\n        </button>\n      </li>\n";
+    + "</span>\n        </button>\n      </li>\n";
 },"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data) {
-    var stack1;
+    var stack1, alias1=depth0 != null ? depth0 : (container.nullContext || {});
 
-  return "<nav class = \"isf-nav_tabs js--tabs\">\n  <div class = \"isf-nav_tabs__inner\">\n    <ul>\n"
-    + ((stack1 = helpers.each.call(depth0 != null ? depth0 : (container.nullContext || {}),(depth0 != null ? depth0.tabs : depth0),{"name":"each","hash":{},"fn":container.program(1, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
+  return "<nav class = \"isf-nav_tabs js--tabs\">\n  <div class = \"isf-nav_tabs__inner--xs el--xs\">\n    <button class = \"isf-nav_tabs__current js--current\">\n      <span class = \"js--current--text isf-current-el\">Select section:</span>\n      <span class = \"isf-icon icon--dropdown\">\n      </span>\n    </button>\n    <ul>\n"
+    + ((stack1 = helpers.each.call(alias1,(depth0 != null ? depth0.tabs : depth0),{"name":"each","hash":{},"fn":container.program(1, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
+    + "    </ul>\n  </div>\n  <div class = \"isf-nav_tabs__inner el--lg\">\n    <ul>\n"
+    + ((stack1 = helpers.each.call(alias1,(depth0 != null ? depth0.tabs : depth0),{"name":"each","hash":{},"fn":container.program(3, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
     + "    </ul>\n  </div>\n</nav>\n";
 },"useData":true});
 

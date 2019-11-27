@@ -89,7 +89,7 @@ ISF_Element_Gallery__Horizontal.prototype._init = function(options) {
         top: 'auto'
       },
       progressBarIndicatorStyles: {
-        backgroundColor: 'purple'
+        backgroundColor: 'white'
       }
   });
 
@@ -100,12 +100,6 @@ ISF_Element_Gallery__Horizontal.prototype._init = function(options) {
   this.scrollScene.on('enter', function() {
     self.progressBar.toggleVisibility(true);
   });
-
-  // if( Modernizr.touchevents ) {
-  //   //this.setupTouch();
-  // } else {
-
-  // }
 };
 
 ISF_Element_Gallery__Horizontal.prototype.setInitialAnimationValues = function() {
@@ -133,50 +127,6 @@ ISF_Element_Gallery__Horizontal.prototype.setupTouch = function() {
   this.manageTouchEvents();
 };
 
-ISF_Element_Gallery__Horizontal.prototype.manageTouchEvents = function() {
-  // pan & swipe are detected simultaneously,
-  // as pan begins on event start, and swipe - once event finishes.
-  // in order to differentiate between them
-  // we wait for 15 pans to give swiping a chance to start
-  // if not, we pan
-
-  // those are not active unless swipe & pan are added to the touch manager
-  var self = this;
-
-  // navigation
-  this.touchManager.on('swiperight swipeleft', function(e) {
-    if( self.touchUtilities.panCount <= 15) {
-      // swipe only if panning is not in progress for a while now
-      self.touchUtilities.isSwiping = true;
-      var direction = (e.type === 'swiperight') ? 'left' : 'right';
-      self.navigateTouch( e.deltaX );
-    }
-  });
-
-  this.touchManager.on('panstart', function(e) {
-    self.touchUtilities.isPanning = true;
-  });
-
-  this.touchManager.on('panend', function(e) {
-    self.touchUtilities.isPanning = false;
-    self.touchUtilities.panCount = 0;
-  });
-
-  this.touchManager.on('panleft panright', function(e) {
-    self.touchUtilities.panCount += 1;
-    if( !self.touchUtilities.isSwiping ) {
-      self.navigateTouch( e.velocityX * 200 );
-    }
-  });
-
-  this.enableTouchAndPanNavigation();
-};
-
-ISF_Element_Gallery__Horizontal.prototype.enableTouchAndPanNavigation = function() {
-    this.touchManager.add( this.touchUtilities.swipe );
-    this.touchManager.add( this.touchUtilities.pan );
-};
-
 ISF_Element_Gallery__Horizontal.prototype.resizeImages = function() {
   // recalibrate image sizes so that height fits layout
   var imgHeight = (window.innerHeight < 768 ? 0.85 : 0.9)*window.innerHeight - hsnbHeaderHeight;
@@ -197,11 +147,22 @@ ISF_Element_Gallery__Horizontal.prototype.setupScrollScene = function() {
     type: (window.innerWidth < 768)? 'vertical' : 'horizontal',
     text: 'Scroll to Explore'
   });
+
   if (window.innerWidth >= 768) { this.scrollIndicator.toggle(true); }
+
+  // if gallery is in another element, like chapter
+  // that also has a scroll scene based on the element's height, then
+  // we need to artificially reset it to scroll height
+
+  TweenLite.set(this.DOM.el, {
+    height: this.DOM.el.offsetWidth*4,
+    border: '1px solid red'
+  });
+
   var self = this;
   this.scrollScene = new ScrollMagic.Scene({
     triggerElement: this.DOM.el,
-    duration: this.DOM.el.offsetWidth*6,
+    duration: this.DOM.el.offsetHeight - window.innerHeight,
     triggerHook: 0
   })
     .on('progress', function(e) {

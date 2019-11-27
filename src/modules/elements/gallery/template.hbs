@@ -3,14 +3,14 @@
 <div class = "isf-el_gallery js--gallery" id = "{{ modId }}" data-layout = "{{ layout }}" data-color_scheme = "{{ colorScheme }}" >
     <div class = "isf-el_gallery--inner js--gallery--inner">
         <div class = "isf-el_gallery__items js--gallery__items">
-        {{#each images}}
-            {{#if src}}
+        {{#each items}}
+            {{#if url}}
             <div class = "isf-el_image js--image isf-el_gallery__item js--gallery__item">
                 <div class = "isf-el_image--inner js--item--inner">
                     <picture class = "isf-el_picture js--picture">
-                        <source srcset="{{ src }}"
+                        <source srcset="{{ url }}"
                             media="(min-width: 768px)">
-                        <img src="{{ src }}" />
+                        <img src="{{ url }}" />
                     </picture>
                     {{#if caption}}
                     <small class = "isf-el_caption">

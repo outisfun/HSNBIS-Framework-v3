@@ -15,7 +15,6 @@ function XPR_ScrollIndicator(el, opts) {
 XPR_ScrollIndicator.prototype.init = function() {
   this.buildMarkup();
   this.setStyles();
-  //this.toggleOnScroll();
   this.toggle(false);
 };
 
@@ -50,10 +49,6 @@ XPR_ScrollIndicator.prototype.setStyles = function() {
       y: '-50%',
       position: 'absolute'
     });
-
-    // TweenLite.set(this.DOM.el.querySelector(".xpr-nav--scroll--line"), {
-    //   rotation: '90deg'
-    // });
   }
 };
 
@@ -74,7 +69,6 @@ XPR_ScrollIndicator.prototype.toggleOnScroll = function() {
 };
 
 XPR_ScrollIndicator.prototype.toggle = function(trueOrFalse) {
-  console.log("toggle!");
   var self = this;
   TweenLite.to(this.DOM.el, 0.35, {
     opacity: trueOrFalse ? 1 : 0,

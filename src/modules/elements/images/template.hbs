@@ -1,18 +1,13 @@
 <div class = "isf-el_images js--images" id = "{{ modId }}">
 	<div class = "isf-el_images__inner">
 
-		{{#each images }}
+		{{#each items }}
       <div class = "isf-el_image js--image" {{#if effect }} data-effect = "{{ effect }}" {{/if}}>
-        {{#if src }}
+        {{#if url }}
           <picture class = "isf-el_picture js--picture">
-            <source srcset="{{ src }}"
+            <source srcset="{{ url }}"
                 media="(min-width: 768px)">
-            <img src="{{ src }}" />
-          </picture>
-        {{/if}}
-        {{#if srcalt }}
-          <picture class = "isf-el_picture js--picture">
-            <img src="{{ src }}" />
+            <img src="{{ url }}" />
           </picture>
         {{/if}}
         {{#if caption }}

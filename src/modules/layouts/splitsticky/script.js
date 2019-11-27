@@ -35,7 +35,6 @@ ISF_Layout_SplitSticky.prototype.init = function () {
       triggerHook: 0,
       duration: dur
     })
-      //.setTween(_tl)
       .setPin(this.DOM.sticky)
       .addTo(this.controller);
   }

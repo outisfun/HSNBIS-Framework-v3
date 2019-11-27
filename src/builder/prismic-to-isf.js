@@ -16,40 +16,98 @@
 
 const _ = require('lodash');
 
-// prismic mapped to ISF data structures
-const PrismicToISFMap = {
-  layouts: {
-
-    chapter: {
-      layoutData: {
-        // if a string is contained inside the key of the property, then handle values
-        // according to its type - text, image, etc
-        background: {
-          key: 'chapterBackground',
-          type: 'image'
-        },
-        title: {
-          key: 'chapterTitle',
-          type: 'text'
-        }
-      }
+// maps prismic values to isf ones
+// because prismic returns stuff from fields in many
+// different ways; text is an array, image is an object,
+// some other values are strings, etc, so the goal here is to
+// have one function to sort it all out.
+const PrismicToISFValue = function (prismicValue) {
+  if (typeof prismicValue === 'string') {
+    return prismicValue;
+  } else if (typeof prismicValue === 'object') {
+    // it's a text or an image
+    if (prismicValue.hasOwnProperty('url')) {
+      return prismicValue.url;
+    } else if ((prismicValue[0] !== undefined) && prismicValue[0].hasOwnProperty('text')) {
+      return prismicValue[0].text;
     }
+  } else {
+    return 'weird value';
   }
 };
 
-const MapPrismicToISFKeys = {
-  layout_chapter_start: 'chapter',
-  isf_text: 'text',
-  isf_images: 'images',
-  isf_quote: 'quote',
-  isf_gallery: 'gallery'
+// map Prismic keys to ISF data
+
+const PrismicToISFKeys = function (prismicKey) {
+
+  var data = {
+    simple_start: {
+      type: 'layout',
+      key: 'simple',
+      data: {
+        color: 'colorScheme'
+      }
+    },
+    chapter_start: {
+      type: 'layout',
+      key: 'chapter',
+      data: {
+        title: 'chapterTitle',
+        background: 'chapterBackground'
+      }
+    },
+    splitsticky_start: {
+      type: 'layout',
+      key: 'splitsticky'
+    },
+    navigation_tab: {
+      type: 'nav',
+      key: 'tabs' // ?
+    },
+    text_block: {
+      type: 'element',
+      key: 'text',
+      data: {
+        heading3: 'heading',
+        heading4: 'highlight',
+        text: 'paragraph'
+      }
+    },
+    quote: {
+      type: 'element',
+      key: 'quote',
+      data: {
+        quote: 'quote',
+        source: 'source'
+      }
+    },
+    _image_s_: { // that's a little weird, maybe fix it
+      type: 'element',
+      key: 'images',
+      data: {
+        effect: 'effect'
+      }
+    }
+  };
+
+  return data[prismicKey] || false;
+
 };
 
 function PrismicToISF(prismicData) {
-  this.prismicData = prismicData.body;
+
+  // we get header data from the
+  // non-repeater story__image and story__title fields
   this.isfData = {
+    story: {
+      image: prismicData.story__image.url,
+      title: prismicData.story__title[0].text
+    },
     layouts: {}
   };
+
+  // content data
+  this.prismicData = prismicData.body;
 
   this.layoutCounter = 0;
   this.elementCounter = 0;
@@ -62,209 +120,143 @@ function PrismicToISF(prismicData) {
 PrismicToISF.prototype.init = function () {
   var self = this;
 
+  console.log('prismic data: ', this.prismicData);
+
   _.forEach (this.prismicData, (data, index) => {
 
-    var key = data.slice_type;
-    // check for special elements like chapter or nav
-    // can also include other stuff in the future, like progress bars
-    // or custom cursors. basically everything that's not basic elements
-    if ( this._isSpecialElement(key) ) {
-      var specialEl = this._isSpecialElement(key);
+    // isf is { type: 'element', key: 'text', data: 'highlight ...'}
+    var isf = PrismicToISFKeys( data.slice_type );
 
-      // IF IT'S A LAYOUT
-      if ((specialEl.type === 'layout')) {
-        if (specialEl.name === 'end') {
-          this.endLayout();
-        } else {
-          this.initLayout(specialEl.name, data);
-        }
-      } else if ((specialEl.type === 'nav')) {
-        if (!this.hasNav) {
-          this.hasNav = true; // init only once
-          this.isfData.nav = { tabs: [] }; // might include other stuff in future, like back to top? idk
-          this.tabCounter = 0;
-        }
-        this.initNavEl(specialEl.name, data, this.prismicData[index + 1]);
+    if (isf.type === 'layout') {
+      // start a layout
+      // layout specific data, like style or background image
+      this.initLayout(isf, data.primary);
+    } else if (isf.type === 'nav') {
+
+      if (!this.hasNav) {
+        this.hasNav = true; // init only once
+        this.isfData.nav = { tabs: [] }; // might include other stuff in future, like back to top? idk
+        this.tabCounter = 0;
       }
+
+      // this.prismicData[index + 1] is the target element for the nav, it's a layout el
+      this.initTabEl(isf, data.primary, this.prismicData[index + 1]);
+    } else if (isf.type === 'element') {
+      this.initElement(isf, data);
     } else {
-      // regular elements
-      if (this.currentLayout === null) {
-        this.initLayout('simple', {});
-      }
-      var isfKey = this.getISFKey(key);
-      var elementData = this.setupElementData(isfKey, data);
-
-      var elementId = 'element_' + key + '_' + this.elementCounter;
-      this.elementCounter += 1;
-      this.currentLayout.layoutContent[elementId] = elementData;
+      console.log('No such key. Check PrismicToISFKeys in prismic-to-isf.js', data.slice_type);
     }
   });
+
+  console.log('prismic to isf data: ', this.isfData);
 };
 
-PrismicToISF.prototype.initNavEl = function (navType, navData, navTarget) {
+PrismicToISF.prototype.initElement = function (isf, data) {
+  var element = {
+    elementType: isf.key,
+    elementData: this.setupElementData(isf, data)
+  };
+
+  var elementId = 'element_' + isf.key + '_' + this.elementCounter;
+  this.elementCounter += 1;
+
+  this.currentLayout.layoutContent[elementId] = element;
+};
+
+PrismicToISF.prototype.setupElementData = function (isf, data) {
+
+  var elementData = {};
+
+  // elements' data can be contained in both the primary and the items object
+  // as primary contains one-time properties (like 'style' for gallery)
+  // and items is a repeater field (e.g. 'images' for gallery)
+  _.forOwn (data.primary, (value, propKey) => {
+    // // prismic key looks like layer__simple__color, so we're looking for the last substring
+    var _substrings = _.split(propKey, '_');
+    var _propKey = _substrings[_substrings.length - 1];
+    var isfPropKey = isf.data[_propKey];
+
+    // value can be null?
+    var isfValue = value ? PrismicToISFValue(value) : 'default'; // refactor
+    elementData[isfPropKey] = isfValue;
+  });
+
+  var isItemsEmpty = (Object.keys(data.items[0]).length === 0 && data.items[0].constructor === Object);
+
+  if (!isItemsEmpty) {
+    elementData.items = [];
+    _.forEach (data.items, (itemGroup, index) => {
+      // item group is an object of subitems
+      _.forOwn (itemGroup, (item, key) => {
+        var _item = {};
+
+        var _substrings = _.split(key, '_');
+        var _propKey = _substrings[_substrings.length - 1];
+        var isfPropKey = isf.data[_propKey];
+
+        var _data = PrismicToISFValue(item);
+        // items are stored in an array though so we don't really need
+        // the key in this case
+        // REFACTOOOOOR BECAUSE THIS ONLY CONSIDERS THAT ITEMS ARE IMAGES
+        _item.url = _data;
+        elementData.items.push(_item);
+      });
+    });
+  }
+
+  return elementData;
+};
+
+PrismicToISF.prototype.initTabEl = function (isf, data, target) {
+
   // structure we want is:
   // nav: { tab_1: { tabLabel: 'something', tabTarget: 'moduleId' }, tab_2: etc...}
-  var nextElKey = navTarget.slice_type; // is it a layout? if it's just an element, we consider a simple layout
-  var targetId = '';
-  if (this._isSpecialElement(nextElKey)) {
-    targetId = this._isSpecialElement(nextElKey).type + '_' + this._isSpecialElement(nextElKey).name + '_' + this.layoutCounter;
-  } else {
-    // otherwise it's a simple layout that we'll build anyway
-    targetId = 'layout_simple_' + this.layoutCounter;
-  }
-  var tabKey = 'tab_' + this.tabCounter;
-  var tabLabel = this.setupTabData(navData);
-  this.isfData.nav.tabs[this.tabCounter] = { tabLabel: tabLabel, tabTarget: targetId };
-
+  var targetId = PrismicToISFKeys( target.slice_type ).type + '_' + PrismicToISFKeys( target.slice_type ).key + '_' + this.layoutCounter;
+  var tabId = 'tab_' + this.tabCounter;
   this.tabCounter += 1;
+  var tabLabel = PrismicToISFValue(data.nav__tab__name);
+
+  this.isfData.nav.tabs[this.tabCounter] = { tabLabel: tabLabel, tabTarget: targetId };
 };
 
 PrismicToISF.prototype.setupTabData = function (navData) {
   return navData.primary.isf_nav_tab_start[0].text;
 };
 
-PrismicToISF.prototype.endLayout = function (key, data) {
-  this.currentLayout = null;
-};
+/* ///// LAYOUT ///// */
 
-PrismicToISF.prototype.initLayout = function (key, layout) {
+PrismicToISF.prototype.initLayout = function (isf, data) {
+
   // initing a layout means suborganizing the rest of the subsequent elements
   // inside a container with certain properties
-  var layoutId = 'layout_' + key + '_' + this.layoutCounter;
+  var layoutId = 'layout_' + isf.key + '_' + this.layoutCounter;
+  this.layoutCounter += 1;
 
-  // init as an object in the isfData
   this.isfData.layouts[layoutId] = {};
-  this.isfData.layouts[layoutId].layoutData = {};
+  this.isfData.layouts[layoutId].layoutType = isf.key;
   this.isfData.layouts[layoutId].layoutContent = {};
-  this.isfData.layouts[layoutId].layoutData = this.setupLayoutData(layout);
+  this.isfData.layouts[layoutId].layoutData = this.setupLayoutData(isf, data);
 
   // and set as current, so you attach elements to it
   this.currentLayout = this.isfData.layouts[layoutId];
 };
 
-PrismicToISF.prototype.setupElementData = function (elType, elData) {
-  // zum beispiel, 'text', {...}
-  var element = {
-    elementType: elType,
-    elementData: {}
-  };
+PrismicToISF.prototype.setupLayoutData = function (isf, data) {
 
-  // elements data from prismic
-  // is structured differently; for example
-  // image is an object and text is an array
-  // fortunately there aren't so many elements i guess :/
-  if (elType === 'images') {
-    element.elementData.images = [];
-    _.forEach (elData.items, (item, index) => {
-      element.elementData.images.push (this.getImageData(item) );
-    });
-  } else if (elType === 'text') {
-    _.forEach(elData.primary.isf_element_text, function(textEl, index) {
-      // check if it's heading, highlight or paragraph
-      var _key = (_.includes(textEl.type, 'heading')) ? ((textEl.type === 'heading3') ? 'heading' : 'highlight') : 'paragraph';
-      element.elementData[_key] = textEl.text;
-    });
-  } else if (elType === 'quote') {
-    // REFACTOR
-    _.forEach(elData.primary, function(quotes, index) {
-      // check if it's heading, highlight or paragraph
-      _.forOwn(quotes, function(textEl, key) {
-        var _key = ((textEl.type === 'heading4') ? 'quote' : 'source');
-        element.elementData[_key] = textEl.text;
-      });
-    });
-  } else if (elType === 'gallery') {
-    element.elementData.layout = elData.primary.isf_gallery_type[0].text;
-    element.elementData.colorScheme = 'dark';
-    element.elementData.images = [];
-    _.forEach(elData.items, (item, index) => {
-      var _image = {
-        src: item.isf_gallery_image.url,
-        alt: item.isf_gallery_image.alt
-      };
-      element.elementData.images.push(_image);
-    });
-  }
-
-  return element;
-};
-
-PrismicToISF.prototype.getImageData = function (data) {
-  return {
-    src: data.isf_element_image.url,
-    alt: data.isf_element_image.alt
-  };
-};
-
-PrismicToISF.prototype.setupLayoutData = function (layout) {
-
-  // first we figure out the layout type
-  var _layoutType = this._isLayout( layout.slice_type );
-  var _layoutContent = layout.items;
-
-  // setup unique layout id
-  var _layoutId = 'layout_' + this.layoutCounter;
-  this.layoutCounter += 1;
-
-  // GET LAYOUT DATA
-  // the layout.primary object
-  // contains data specific to the layout itself
-  // we map it through PrismicToISFMap
   var layoutData = {};
-  _.forOwn(layout.primary, (value, prismicID) => {
-    // key looks like isf_hennessy_chapter-1_background, so we're looking for the last substring
-    var _substrings = _.split(prismicID, '_');
-    var _key = _substrings[_substrings.length - 1]; // key is, z.b. background or image
-    var _prop = PrismicToISFMap.layouts[_layoutType].layoutData[_key]; // prop is, z.b. { key: 'chapterBackground', type: 'image' }
-    var _data = this.setupLayoutPropertyData(_prop.type, value);
 
-    layoutData[_prop.key] = _data;
+  _.forOwn(data, (value, key) => {
+    // prismic key looks like layer__simple__color, so we're looking for the last substring
+    var _substrings = _.split(key, '_');
+    var propKey = _substrings[_substrings.length - 1];
+    var isfPropKey = isf.data[propKey];
+
+    // map prismic to isf value
+    var isfValue = PrismicToISFValue(value);
+    layoutData[isfPropKey] = isfValue;
   });
 
   return layoutData;
-};
-
-PrismicToISF.prototype.setupLayoutPropertyData = function (propType, propData) {
-  // the thing is, even layoutData properties are actually elements but
-  // we need them to return only one thing
-  // so with texts, it's the very first text, with image, it's just the src
-  return (propType === 'image') ? propData.url : propData[0].text;
-};
-
-PrismicToISF.prototype._isLayout = function (key) {
-  var _layout = null;
-  if (_.includes(key, 'chapter')) {
-    _layout = 'chapter';
-  } else if (_.includes(key, 'split-sticky')) {
-    _layout = 'split-sticky';
-  } else if (_.includes(key, 'layout_end')) {
-    _layout = 'end-layout';
-  }
-  return _layout;
-};
-
-// returns type for slices that are not single elements
-// but are something special, like layout start or tab
-PrismicToISF.prototype._isSpecialElement = function (key) {
-  var _type = null;
-  var _name = null;
-
-  // it's a layout / nav element
-  // then the second string would be the name of the layout
-  if (_.includes(key, 'layout')) {
-    _type = 'layout';
-    _name = _.split(key, '_')[1];
-  } else if  (_.includes(key, 'nav')) {
-    _type = 'nav';
-    _name = _.split(key, '_')[1];
-  }
-
-  // _type and _name are set only if it's not element (special element let's say)
-  return (_type === null) ? false : { type: _type, name: _name };
-};
-
-PrismicToISF.prototype.getISFKey = function(prismicKey) {
-  return MapPrismicToISFKeys[prismicKey];
 };
 
 module.exports = PrismicToISF;
