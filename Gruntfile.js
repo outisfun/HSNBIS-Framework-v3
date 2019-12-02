@@ -25,7 +25,11 @@ module.exports = function(grunt) {
     browserify: {
       options: {
         browserifyOptions: {
-          paths: [ './src', './stories/' + story + '/build/', './stories/' + story + '/build/js/', './src/modules/layouts/', './src/modules/elements/', './src/modules/nav/', './src/modules/elements/**/' ]
+          paths: [ './stories/' + story + '/build/',
+                    './stories/' + story + '/build/js/',
+                    './src/framework/',
+                    './src/framework/modules/',
+                    './src/']
         }
       },
       stories: {
@@ -51,7 +55,7 @@ module.exports = function(grunt) {
           node: true
         },
         files: {
-          './src/builder/templates.js': ['./src/modules/layouts/**/*.hbs', './src/modules/elements/**/*.hbs', './src/modules/nav/**/*.hbs', './src/modules/custom/**/*.hbs','./stories/**/*.hbs'],
+          './src/builder/templates.js': ['./src/framework/modules/**/**/*.hbs'],
         }
       }
     },
@@ -86,33 +90,13 @@ module.exports = function(grunt) {
       }
     },
 
-    responsive_images: {
-      myTask: {
-        options: {
-          sizes: [
-          {
-            name: 'md',
-            width: 640,
-            quality: 70
-          },
-          {
-            name: "lg",
-            width: 1600,
-            quality: 70
-          }]
-        },
-        files: [{
-          expand: true,
-          src: ['**.{jpg,gif,png}'],
-          cwd: ((story === 'preview') ? './' : './stories/') + story + '/build/assets/',
-          dest: ((story === 'preview') ? './' : './stories/') + story + '/dist/assets/'
-        }]
-      }
-    },
-
     sass: {
       options: {
-        loadPath: ['./src/scss', './src/modules', './src/modules/elements', './src/modules/layouts', './src/modules/nav', './stories/']
+        loadPath: [
+          './src/framework/',
+          './src/framework/modules/',
+          './stories/**/'
+        ]
       },
       stories: {
         src: (story === 'preview') ? './preview/build/styles.scss' : './stories/' + story + '/build/styles.scss',
@@ -162,25 +146,29 @@ module.exports = function(grunt) {
 
     watch: {
       sass: {
-        files: ['./stories/**/build/*.scss', './src/scss/style.scss', './src/modules/**/style.scss', './preview/build/*.scss'],
+        files: [
+          './stories/**/build/*.scss',
+          './src/framework/common/scss/*.scss',
+          './src/framework/modules/**/**/*.scss'
+        ],
         tasks: ['sass:stories']
       },
       js: {
-        files: ['./src/*.js', './stories/**/build/*.js', './src/builder/*.js', './src/modules/**/*.js', './preview/build/*.js',],
+        files: [
+          './src/framework/utilities/*.js',
+          './src/framework/common/js/*.js',
+          './src/framework/modules/**/**/*.js',
+          './stories/**/build/*.js'],
         tasks: ['browserify:stories']
       },
       hbs: {
-        files: ['./src/modules/**/**/template.hbs', './stories/**/**/template.hbs', './stories/**/**/template.hbs'],
+        files: ['./src/framework/modules/**/**/template.hbs'],
         tasks: ['handlebars']
       },
       html: {
         files: ['./stories/**/build/index.html'],
         tasks: ['handlebars', 'htmlmin']
       }
-    },
-
-    serve: {
-      'path': './stories/' + story + '/dist/index.html'
     }
 
   });
