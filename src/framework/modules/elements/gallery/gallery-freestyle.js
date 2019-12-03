@@ -16,12 +16,12 @@ class __Gallery__Freestyle {
     console.log('freestyle gallery!!!')
     this.controller = new ScrollMagic.Controller();
 
-    this.setInitialValues();
+    this.createMarkup();
     // this.resizeImages();
     // this.setupScrollScene();
   }
 
-  setInitialValues () {
+  createMarkup () {
 
     var _isVertical = false;
     // ok, so we need to iterate over items //
@@ -60,7 +60,7 @@ class __Gallery__Freestyle {
       triggerHook: 0.75
     })
       .on('enter', () => {
-        TweenLite.to(item, 0.5, {
+        TweenLite.to(item, 1, {
           opacity: '1',
           y: '0'
         });
@@ -89,8 +89,8 @@ class __Gallery__Freestyle {
 
       // provide extra space below container to reduce croppings
       TweenLite.set(wrapper, {
-        marginBottom: window.innerHeight/4,
-        marginTop: window.innerHeight/4
+        marginBottom: window.innerHeight/6,
+        marginTop: window.innerHeight/6
       });
 
       // make a scroll scene and bind tween

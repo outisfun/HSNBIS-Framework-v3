@@ -73,7 +73,15 @@ const PrismicToISFKeys = function (prismicKey) {
       data: {
         heading3: 'heading',
         heading4: 'highlight',
-        text: 'paragraph'
+        paragraph: 'paragraph'
+      }
+    },
+    video: {
+      type: 'element',
+      key: 'video',
+      data: {
+        id: 'videoId',
+        player: 'playerId'
       }
     },
     quote: {
@@ -97,6 +105,14 @@ const PrismicToISFKeys = function (prismicKey) {
       data: {
         style: 'style'
       }
+    },
+    cta: {
+      type: 'element',
+      key: 'cta',
+      data: {
+        text: 'text',
+        url: 'url'
+      }
     }
   };
 
@@ -105,13 +121,11 @@ const PrismicToISFKeys = function (prismicKey) {
 };
 
 function PrismicToISF(prismicResponse) {
-
   this.prismicData = {};
   this.isfData = {
     story: {},
     layouts: {}
   };
-
   this.layoutCounter = 0;
   this.elementCounter = 0;
   this.currentLayout = null;
@@ -123,8 +137,6 @@ PrismicToISF.prototype.convert = function(response) {
   this.prismicData = response.results[0].data.body;
   this.isfData.story.image = response.results[0].data.story__image.url;
   this.isfData.story.title = response.results[0].data.story__title[0].text;
-
-  console.log(this.prismicData);
 
   _.forEach (this.prismicData, (data, index) => {
 
@@ -142,7 +154,6 @@ PrismicToISF.prototype.convert = function(response) {
         this.isfData.nav = { tabs: [] }; // might include other stuff in future, like back to top? idk
         this.tabCounter = 0;
       }
-
       // this.prismicData[index + 1] is the target element for the nav, it's a layout el
       this.initTabEl(isf, data.primary, this.prismicData[index + 1]);
     } else if (isf.type === 'element') {
@@ -169,8 +180,8 @@ PrismicToISF.prototype.initElement = function (isf, data) {
 };
 
 PrismicToISF.prototype.setupElementData = function (isf, data) {
-
   var elementData = {};
+
   // elements' data can be contained in both the primary and the items object
   // as primary contains one-time properties (like 'style' for gallery)
   // and items is a repeater field (e.g. 'images' for gallery)
@@ -178,11 +189,24 @@ PrismicToISF.prototype.setupElementData = function (isf, data) {
     // // prismic key looks like layer__simple__color, so we're looking for the last substring
     var _substrings = _.split(propKey, '_');
     var _propKey = _substrings[_substrings.length - 1];
-    var isfPropKey = isf.data[_propKey];
-    console.log('primary data', value, propKey);
-    // value can be null?
-    var isfValue = value ? PrismicToISFValue(value) : 'default'; // refactor
-    elementData[isfPropKey] = isfValue;
+
+    // REWRITE!!!
+    if ((_propKey === 'text') && (propKey !== 'element__cta__text')) {
+      // text is a bit more special because all data is an array
+      _.forEach (value, (subValue, index) => {
+        // subvalue is like, { type: 'heading4', text: 'something ... ' }
+        var isfPropKey = isf.data[subValue.type];
+        var isfValue = PrismicToISFValue(subValue.text);
+        elementData[isfPropKey] = isfValue;
+      });
+    } else {
+      var isfPropKey = isf.data[_propKey];
+      console.log("isf prop key and prop key", propKey, value, isfPropKey, _propKey);
+
+      var isfValue = value ? PrismicToISFValue(value) : 'default'; // refactor
+
+      elementData[isfPropKey] = isfValue;
+    }
   });
 
   var isItemsEmpty = (Object.keys(data.items[0]).length === 0 && data.items[0].constructor === Object);
@@ -207,7 +231,6 @@ PrismicToISF.prototype.setupElementData = function (isf, data) {
       });
     });
   }
-
   return elementData;
 };
 

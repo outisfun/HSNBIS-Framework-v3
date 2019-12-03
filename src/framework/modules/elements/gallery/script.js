@@ -5,18 +5,21 @@ const _ = require('lodash');
 const ISFModule = require('common/js/isf-module.js');
 const galleryHorizontal = require('elements/gallery/gallery-horizontal.js');
 const galleryFreestyle = require('elements/gallery/gallery-freestyle.js');
+const galleryScroller = require('elements/gallery/gallery-scroller.js');
 
 class ISFModule__Gallery extends ISFModule {
 
   init() {
     this.opts = { layout: this.DOM.el.dataset.layout ? this.DOM.el.dataset.layout : 'horizontal' };
-    console.log('data layout', this.DOM.el.dataset.layout);
     switch (this.opts.layout) {
       case 'horizontal':
         this.extendGallery(galleryHorizontal);
         break;
       case 'freestyle':
         this.extendGallery(galleryFreestyle);
+        break;
+      case 'scroller':
+        this.extendGallery(galleryScroller);
         break;
       default:
         break;

@@ -12,6 +12,9 @@ const ISFDATA = {
   IMAGES: {
 
   },
+  CTA: {
+
+  },
   GALLERY: {
     CLASSES: {
       ITEMSWRAP: 'js--gallery__items',
