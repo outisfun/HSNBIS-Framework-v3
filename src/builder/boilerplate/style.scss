@@ -1,24 +1,23 @@
 
 /* Import framework styles */
 
-@import 'style.scss';
+@import 'common/scss/style.scss';
 
 /* Import module styles */
 
-@import "simple/style.scss";
-@import "chapter/style.scss";
-@import "splitsticky/style.scss";
-@import "floater/style.scss";
-@import "interactivescroller/style.scss";
+@import "layouts/simple/style.scss";
+@import "layouts/chapter/style.scss";
+@import "layouts/splitsticky/style.scss";
+@import "layouts/interactivescroller/style.scss";
 
-@import "images/style.scss";
-@import "text/style.scss";
-@import "quote/style.scss";
-@import "cta/style.scss";
-@import "video/style.scss";
-@import "gallery/style.scss";
+@import "elements/images/style.scss";
+@import "elements/text/style.scss";
+@import "elements/quote/style.scss";
+@import "elements/cta/style.scss";
+@import "elements/video/style.scss";
+@import "elements/gallery/style.scss";
 
-@import "tabs/style.scss";
+@import "nav/tabs/style.scss";
 
 @font-face {
   font-family: univers-light;

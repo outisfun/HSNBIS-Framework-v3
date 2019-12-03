@@ -31,10 +31,6 @@ var buildStory = function () {
 
       buildFile('scripts.js', 'build', String(jsFile));
       buildFile('styles.scss', 'build', String(scssFile));
-    });
-
-    mkdirp('./stories/' + storyFolder +'/build/assets', function (err) {
-      if (err) console.error(err);
       buildFile('index.html', 'dist', String(htmlFile));
     });
 
