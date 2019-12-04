@@ -35,7 +35,6 @@ class ISFModule__Tabs extends ISFModule {
   }
 
   initLGEvents() {
-    console.log("this dom tabs", this.DOM.tabs);
     _.forEach(this.DOM.tabs, (tab, index) => {
       this.initTabScrollTrigger(tab);
       this.initTabClickEvent(tab);

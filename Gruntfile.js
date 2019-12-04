@@ -24,12 +24,14 @@ module.exports = function(grunt) {
 
     browserify: {
       options: {
+        transform: [['babelify', { presets: ["@babel/preset-env"] }]],
         browserifyOptions: {
           paths: [ './stories/' + story + '/build/',
                     './stories/' + story + '/build/js/',
                     './src/framework/',
                     './src/framework/modules/',
-                    './src/']
+                    './src/'],
+          debug: true
         }
       },
       stories: {
@@ -73,23 +75,6 @@ module.exports = function(grunt) {
       }
     },
 
-    htmlmin: {                                     // Task
-      dist: {                                      // Target
-        options: {                                 // Target options
-          removeComments: true,
-          collapseWhitespace: true
-        },
-        files: [{
-          expand: true,
-          src: ['./stories/' + story + '/dist/index.html'],
-          rename: function (dest, src) {
-            var customDest = src.replace('index', 'wp');
-            return customDest;
-          }
-        }]
-      }
-    },
-
     sass: {
       options: {
         loadPath: [
@@ -126,24 +111,6 @@ module.exports = function(grunt) {
       story: ['./build-files.js', './src/modules/**/*.js']
     },
 
-    yaml: {
-      builder: {
-        options: {
-          ignored: /^_/,
-          space: 4
-        },
-        files: [
-          {
-            expand: true,
-            src: ['./src/*.yml'],
-            rename: function(dest, src) {
-              return src.replace('yml', 'json');
-            }
-          }
-        ]
-      },
-    },
-
     watch: {
       sass: {
         files: [
@@ -165,10 +132,6 @@ module.exports = function(grunt) {
       hbs: {
         files: ['./src/framework/modules/**/**/template.hbs'],
         tasks: ['handlebars']
-      },
-      html: {
-        files: ['./stories/**/build/index.html'],
-        tasks: ['handlebars', 'htmlmin']
       }
     }
 
@@ -177,15 +140,12 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-sass');
   grunt.loadNpmTasks('grunt-contrib-watch');
   grunt.loadNpmTasks('grunt-contrib-copy');
-  grunt.loadNpmTasks('grunt-assemble');
   grunt.loadNpmTasks('grunt-browserify');
   grunt.loadNpmTasks('grunt-eslint');
   grunt.loadNpmTasks('grunt-autoprefixer');
   grunt.loadNpmTasks('grunt-contrib-uglify-es');
   grunt.loadNpmTasks('grunt-contrib-handlebars');
-  grunt.loadNpmTasks('grunt-contrib-htmlmin');
   grunt.loadNpmTasks('grunt-shell');
-  grunt.loadNpmTasks('grunt-yaml');
 
   grunt.registerTask('lintall', ['eslint']);
 
