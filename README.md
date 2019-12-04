@@ -119,11 +119,11 @@ The converted data is an object looking like that:
 {
 
   layouts: {
-    **layout_simple_0: {
+    layout_simple_0: {
       data: {
         colorScheme: "light",
         layoutId: "layout_simple_0"
-      }**
+      }
       layoutContent: {
         **element_text_0: {
           type: "text",
@@ -131,7 +131,7 @@ The converted data is an object looking like that:
             paragraph: "This is a test story!", elementId: "element_text_0"}
             type: "text"
           }
-        }**,
+        },
         element_images_1: {type: "images", data: {…}}
         element_images_3: {type: "images", data: {…}}
         element_quote_2: {type: "quote", data: {…}}
@@ -141,7 +141,7 @@ The converted data is an object looking like that:
     layout_chapter_2: { // etc },
   },
 
-  **nav: {
+  nav: {
     tabs_0: {
       type: 'tabs',
       data: {
@@ -151,7 +151,7 @@ The converted data is an object looking like that:
         ]
       }
     }, // etc.
-  },**
+  },
 
   story: {
     image: "https://images.prismic.io/hsnbsttest/50cdff3b-bfca-40b1-9560-1140974883fb_img_9864.JPG?auto=compress,format"
