@@ -22,8 +22,8 @@ function ISFNavTabs (el, controller) {
 
   this.DOM.innerXS = this.DOM.el.querySelector(".isf-nav_tabs__inner--xs");
   this.DOM.currentXS = this.DOM.el.querySelector(".js--current");
-  this.DOM.currentIcon = this.DOM.currentXS.querySelector(".isf-icon");
-  this.DOM.currentText = this.DOM.currentXS.querySelector(".js--current--text");
+  this.DOM.currentIcon = this.DOM.currentxs.querySelector(".isf-icon");
+  this.DOM.currentText = this.DOM.currentxs.querySelector(".js--current--text");
 
   this.scrollScenes = [];
 }

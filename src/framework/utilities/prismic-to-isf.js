@@ -161,8 +161,9 @@ PrismicToISF.prototype.convert = function(response) {
       // refactor in future when you have more material on nav els
 
       // this would have to be tracked individually
-      var navId = 'tabs_' + this.navCounter;
       if ((isf.key === 'tabs') && (!this.hasTabs)) {
+        this.hasTabs = true;
+        var navId = 'tabs_' + this.navCounter;
         this.navCounter += 1;
         this.isfData.nav[navId] = {
           type: 'tabs',
@@ -171,7 +172,7 @@ PrismicToISF.prototype.convert = function(response) {
       }
 
       if (isf.key === 'tabs') {
-        this.initTabEl(isf, data.primary, this.isfData.nav[navId], this.prismicData[index + 1]);
+        this.initTabEl(isf, data.primary, this.isfData.nav.tabs_0, this.prismicData[index + 1]);
       }
 
     } else if (isf.type === 'element') {
@@ -188,7 +189,6 @@ PrismicToISF.prototype.initTabEl = function (isf, data, parent, target) {
 
   // structure we want is:
   // nav_0: { type: 'tabs', data: { tabs: [{tabLabel: 'something', tabTarget: 'moduleId'}, {}, {}] } }
-  console.log('init tab', isf, data, target);
 
   var targetId = PrismicToISFKeys( target.slice_type ).type + '_' + PrismicToISFKeys( target.slice_type ).key + '_' + this.layoutCounter;
   var tabLabel = PrismicToISFValue(data.nav__tab__name);
