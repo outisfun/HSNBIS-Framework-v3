@@ -33,8 +33,8 @@ $ npm install -g grunt-cli
 ```
 
 Access our test Prismic account here: https://hsnbsttest.prismic.io/
-user: katerina.vaseva@highsnobiety.com
-pass: (Ask me :))
+
+(user: katerina.vaseva@highsnobiety.com, pass: Ask me :) ))
 
 ### Building the test story
 
@@ -125,7 +125,7 @@ The converted data is an object looking like that:
         layoutId: "layout_simple_0"
       }
       layoutContent: {
-        **element_text_0: {
+        element_text_0: {
           type: "text",
           data: {
             paragraph: "This is a test story!", elementId: "element_text_0"}
