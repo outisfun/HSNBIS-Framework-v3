@@ -22,6 +22,7 @@ class ISFModuleBuilder {
     var mod;
 
     if (ISFDATA[_.upperCase(moduleType)] !== undefined) {
+
       // check if it has own constructor
       if (ISFDATA[_.upperCase(moduleType)].hasOwnProperty('MODULE')) {
         //console.log("module type and data", moduleType, moduleData);
