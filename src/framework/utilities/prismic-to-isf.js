@@ -122,14 +122,22 @@ const PrismicToISFKeys = function (prismicKey) {
 
 function PrismicToISF(prismicResponse) {
   this.prismicData = {};
+
   this.isfData = {
     story: {},
-    layouts: {}
+    layouts: {},
+    nav: {}
   };
+
   this.layoutCounter = 0;
   this.elementCounter = 0;
+  this.navCounter = 0;
+  this.tabCounter = 0;
+
+  this.hasTabs = false;
+
   this.currentLayout = null;
-  this.hasNav = false;
+  this.currentNav = null;
 }
 
 PrismicToISF.prototype.convert = function(response) {
@@ -142,28 +150,54 @@ PrismicToISF.prototype.convert = function(response) {
 
     // isf is { type: 'element', key: 'text', data: 'highlight ...'}
     var isf = PrismicToISFKeys( data.slice_type );
-
     if (isf.type === 'layout') {
       // start a layout
       // layout specific data, like style or background image
       this.initLayout(isf, data.primary);
     } else if (isf.type === 'nav') {
+      // isf is like, {type: "nav", key: "tabs"}
+      // except that you will have more than one tab,
+      // but they need to be wrapped in one object
+      // refactor in future when you have more material on nav els
 
-      if (!this.hasNav) {
-        this.hasNav = true; // init only once
-        this.isfData.nav = { tabs: [] }; // might include other stuff in future, like back to top? idk
-        this.tabCounter = 0;
+      // this would have to be tracked individually
+      var navId = 'tabs_' + this.navCounter;
+      if ((isf.key === 'tabs') && (!this.hasTabs)) {
+        this.navCounter += 1;
+        this.isfData.nav[navId] = {
+          type: 'tabs',
+          data: { tabs: [] }
+        };
       }
-      // this.prismicData[index + 1] is the target element for the nav, it's a layout el
-      this.initTabEl(isf, data.primary, this.prismicData[index + 1]);
+
+      if (isf.key === 'tabs') {
+        this.initTabEl(isf, data.primary, this.isfData.nav[navId], this.prismicData[index + 1]);
+      }
+
     } else if (isf.type === 'element') {
       this.initElement(isf, data);
     } else {
       console.log('No such key. Check PrismicToISFKeys in prismic-to-isf.js', data.slice_type);
     }
   });
-
+  console.log('isf data', this.isfData);
   return this.isfData;
+};
+
+PrismicToISF.prototype.initTabEl = function (isf, data, parent, target) {
+
+  // structure we want is:
+  // nav_0: { type: 'tabs', data: { tabs: [{tabLabel: 'something', tabTarget: 'moduleId'}, {}, {}] } }
+  console.log('init tab', isf, data, target);
+
+  var targetId = PrismicToISFKeys( target.slice_type ).type + '_' + PrismicToISFKeys( target.slice_type ).key + '_' + this.layoutCounter;
+  var tabLabel = PrismicToISFValue(data.nav__tab__name);
+
+  parent.data.tabs.push ({ tabLabel: tabLabel, tabTarget: targetId });
+};
+
+PrismicToISF.prototype.setupTabData = function (navData) {
+  return navData.primary.isf_nav_tab_start[0].text;
 };
 
 PrismicToISF.prototype.initElement = function (isf, data) {
@@ -201,7 +235,6 @@ PrismicToISF.prototype.setupElementData = function (isf, data) {
       });
     } else {
       var isfPropKey = isf.data[_propKey];
-      console.log("isf prop key and prop key", propKey, value, isfPropKey, _propKey);
 
       var isfValue = value ? PrismicToISFValue(value) : 'default'; // refactor
 
@@ -232,22 +265,6 @@ PrismicToISF.prototype.setupElementData = function (isf, data) {
     });
   }
   return elementData;
-};
-
-PrismicToISF.prototype.initTabEl = function (isf, data, target) {
-
-  // structure we want is:
-  // nav: { tab_1: { tabLabel: 'something', tabTarget: 'moduleId' }, tab_2: etc...}
-  var targetId = PrismicToISFKeys( target.slice_type ).type + '_' + PrismicToISFKeys( target.slice_type ).key + '_' + this.layoutCounter;
-  var tabId = 'tab_' + this.tabCounter;
-  this.tabCounter += 1;
-  var tabLabel = PrismicToISFValue(data.nav__tab__name);
-
-  this.isfData.nav.tabs[this.tabCounter] = { tabLabel: tabLabel, tabTarget: targetId };
-};
-
-PrismicToISF.prototype.setupTabData = function (navData) {
-  return navData.primary.isf_nav_tab_start[0].text;
 };
 
 /* ///// LAYOUT ///// */

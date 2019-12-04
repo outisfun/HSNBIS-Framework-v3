@@ -25,7 +25,8 @@ const ISFDATA = {
   },
   TABS: {
     CLASSES: {
-      TAB: 'js--tab'
+      TAB: 'js--tab',
+      TABXS: 'js--tab--xs'
     },
     MODULE: require('nav/tabs/script.js')
   },

@@ -6,6 +6,9 @@ const ISFModuleBuilder = require('common/js/isf-module-builder.js');
 const ISFTEMPLATES = require('builder/templates.js');
 const ISFDATA = require('common/js/isf-data.js');
 
+function isEmpty (obj) {
+  return (Object.keys(obj).length === 0 && obj.constructor === Object);
+}
 
 class ISFStory {
 
@@ -15,6 +18,7 @@ class ISFStory {
     this.moduleBuilder = new ISFModuleBuilder();
     this.modules = {};
 
+    //console.log('story data', this.storyData);
     this.buildModules();
 
     setTimeout(() => {
@@ -29,6 +33,16 @@ class ISFStory {
   }
 
   buildModules() {
+
+    // check for navigation elements,
+    // they are optional
+    if (this.storyData.nav && (!isEmpty(this.storyData.nav))) {
+      _.forOwn(this.storyData.nav, (navObj, navId) => {
+        var nav = this.buildModule(navId, navObj);
+        this.DOM.el.appendChild(nav.DOM.el);
+      });
+    }
+
     _.forOwn(this.storyData.layouts, (layoutObj, layoutId) => {
 
       var layout = this.buildModule(layoutId, layoutObj);

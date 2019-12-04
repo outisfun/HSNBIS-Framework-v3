@@ -20,9 +20,11 @@ class ISFModuleBuilder {
   buildModule(moduleType, moduleData) {
 
     var mod;
+
     if (ISFDATA[_.upperCase(moduleType)] !== undefined) {
       // check if it has own constructor
       if (ISFDATA[_.upperCase(moduleType)].hasOwnProperty('MODULE')) {
+        //console.log("module type and data", moduleType, moduleData);
         mod = new ISFDATA[_.upperCase(moduleType)].MODULE(moduleType, moduleData);
 
         // now use ISFDATA to assign special elements

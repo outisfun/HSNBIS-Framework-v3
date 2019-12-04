@@ -158,6 +158,7 @@ module.exports = function(grunt) {
           './src/framework/utilities/*.js',
           './src/framework/common/js/*.js',
           './src/framework/modules/**/**/*.js',
+          './src/framework/premium/**/**/*.js',
           './stories/**/build/*.js'],
         tasks: ['browserify:stories']
       },

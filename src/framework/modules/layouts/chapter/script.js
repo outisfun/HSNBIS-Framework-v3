@@ -6,7 +6,6 @@ const ISFModule = require('common/js/isf-module.js');
 class ISFModule__Chapter extends ISFModule {
 
   init() {
-    console.log(this.DOM.header);
     this.controller = new ScrollMagic.Controller();
     this.initPin();
   }
